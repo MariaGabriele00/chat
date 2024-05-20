@@ -1,16 +1,6 @@
-# chat
+![image](https://github.com/MariaGabriele00/chat/assets/138392706/cf77aeda-0731-4c10-93ec-51ceeb011411)# Chat bot com o gemini do google
 
-A new Flutter project.
+Essa aplicação é de um chat bot ligado ao gemini, no qual você realiza perguntas e ele retorna com as respostas de acordo. 
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Pacotes utilizados
+dash_chat_2 e http
