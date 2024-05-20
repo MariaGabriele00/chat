@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:chat/consts.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -9,39 +13,81 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final ChatUser _currentUser =
-      ChatUser(id: '1', firstName: 'Maria', lastName: 'Gabriele');
-  final ChatUser _userChatGpt =
-      ChatUser(id: '2', firstName: 'Chat', lastName: 'GPT');
-  List<ChatMessage> _message = <ChatMessage>[];
+  final ChatUser _user = ChatUser(
+    id: '1',
+    firstName: 'Maria',
+    lastName: 'Gabi',
+  );
+
+  final ChatUser _gptChatUser = ChatUser(
+    id: '2',
+    firstName: 'Gemini',
+    lastName: 'Chat',
+  );
+
+  final List<ChatMessage> allMessages = [];
+  final List<ChatUser> typingUsers = <ChatUser>[];
+  getData(ChatMessage m) async {
+    typingUsers.add(_gptChatUser);
+    allMessages.insert(0, m);
+    setState(() {});
+    var data = {
+      "contents": [
+        {
+          "parts": [
+            {"text": m.text}
+          ]
+        }
+      ]
+    };
+    await http
+        .post(Uri.parse(urlGoogle), headers: header, body: jsonEncode(data))
+        .then((value) {
+      if (value.statusCode == 200) {
+        var result = jsonDecode(value.body);
+        ChatMessage m1 = ChatMessage(
+          user: _gptChatUser,
+          createdAt: DateTime.now(),
+          text: result["candidates"][0]["content"]["parts"][0]["text"],
+        );
+        allMessages.insert(0, m1);
+      }
+    }).catchError((e) {});
+    typingUsers.remove(_gptChatUser);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 135, 25, 150),
+        backgroundColor: const Color.fromRGBO(103, 0, 151, 1),
         title: const Text(
-          'Chat GPT',
+          'Chat',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
       ),
       body: DashChat(
-        currentUser: _currentUser,
+        currentUser: _user,
         messageOptions: const MessageOptions(
-          currentUserContainerColor: Color.fromARGB(255, 255, 168, 197),
+          showTime: true,
+          currentUserContainerColor: Color.fromRGBO(52, 47, 54, 1),
+          containerColor: Color.fromRGBO(103, 0, 151, 1),
+          textColor: Colors.white,
         ),
         onSend: (ChatMessage m) {
-          getChatResponse(m);
+          getData(m);
         },
-        messages: _message,
+        messages: allMessages,
+        typingUsers: typingUsers,
       ),
     );
-  }
-
-  Future<void> getChatResponse(ChatMessage m) async {
-    setState(() {
-      _message.insert(0, m);
-    });
   }
 }
