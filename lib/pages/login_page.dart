@@ -95,7 +95,14 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(height: 40),
                           MyTextButton(
                             label: 'Acessar',
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ChatPage(),
+                                ),
+                              );
+                            },
                           ),
                         ],
                       ),
