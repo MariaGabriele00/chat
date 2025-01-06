@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           MyInputField(
-                            label: 'Email',
+                            label: 'E-mail',
                             placeholder: 'Digite seu email aqui',
                             onChange: (value) {
                               emailController.text = value;
