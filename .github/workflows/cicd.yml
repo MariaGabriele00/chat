@@ -1,33 +1,19 @@
 name: 🚀 Gabi testando
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: pull_request
 
 jobs:
-  build:
+  flutter_test:
+    name: Flutter test
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Cache Flutter
-        uses: actions/cache@v3
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
         with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-cache-
-              
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: stable
+          channel: "stable"
+          flutter-version: 3.19.6
+          architecture: x64
+          cache: true
 
       - name: Configure Flutter
         run: |
